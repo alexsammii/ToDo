@@ -1,0 +1,10 @@
+com/example/todos/categories/CategoryController.class
+com/example/todos/todo/TodoRepository.class
+com/example/todos/categories/CategoryService.class
+com/example/todos/categories/Category.class
+com/example/todos/categories/CategoryRepository.class
+com/example/todos/todo/TodoService.class
+com/example/todos/TodosBackendApplication.class
+com/example/todos/todo/Todo.class
+com/example/todos/common/BaseEntity.class
+com/example/todos/todo/TodoController.class
