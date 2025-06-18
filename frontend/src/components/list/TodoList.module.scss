@@ -1,0 +1,105 @@
+.todoList {
+  padding: 2rem;
+  background-color: #f9fafb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.toggleArchived {
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: #2563eb;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.todoItem {
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.todoItem:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.todoTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1f2937;
+}
+
+.todoMeta,
+.todoStatus {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 2px 0;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  button {
+    font-size: 0.875rem;
+    padding: 0.4rem 0.75rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .edit {
+    background-color: #3b82f6;
+    color: white;
+  }
+
+  .duplicate {
+    background-color: #10b981;
+    color: white;
+  }
+
+  .archive {
+    background-color: #ef4444;
+    color: white;
+  }
+}
+
+
+.todoItem {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  flex: 1 1 300px;
+  max-width: 350px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.todoFlexWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
