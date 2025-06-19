@@ -5,13 +5,13 @@ import {
   duplicateTodo,
   getAllTodos,
 } from "../../services/TodoServices";
-import EditTodo from "../../pages/EditTodo";
 import styles from "./TodoList.module.scss";
+import EditTodo from "../../pages/EditTodo";
 
 function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [hideArchived, setHideArchived] = useState(false);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
   const fetchTodos = () => {
     getAllTodos()
@@ -22,15 +22,6 @@ function TodoList() {
   useEffect(() => {
     fetchTodos();
   }, []);
-
-  const handleSave = () => {
-    setEditingTodo(null);
-    fetchTodos();
-  };
-
-  const handleCancel = () => {
-    setEditingTodo(null);
-  };
 
   const handleDuplicate = async (todo: Todo) => {
     try {
@@ -50,17 +41,22 @@ function TodoList() {
     }
   };
 
+  const handleEdit = (todo: Todo) => {
+    setEditingTodo(todo);
+  };
+
+  const handleSave = () => {
+    setEditingTodo(null);
+    fetchTodos();
+  };
+
+  const handleCancel = () => {
+    setEditingTodo(null);
+  };
+
   return (
     <div className={styles.todoList}>
       <h2 className={styles.header}>All Tasks</h2>
-
-      {editingTodo && (
-        <EditTodo
-          todo={editingTodo}
-          onSave={handleSave}
-          onCancel={handleCancel}
-        />
-      )}
 
       <button
         onClick={() => setHideArchived(!hideArchived)}
@@ -72,11 +68,11 @@ function TodoList() {
       {todos.length === 0 ? (
         <p>No todos found.</p>
       ) : (
-        <div className={styles.todoFlexWrap}>
+        <div className={styles.cardGrid}>
           {todos
             .filter((todo) => !hideArchived || !todo.archived)
             .map((todo) => (
-              <li key={todo.id} className={styles.todoItem}>
+              <div key={todo.id} className={styles.todoItem}>
                 <div className={styles.todoTitle}>{todo.task}</div>
                 <div className={styles.todoMeta}>
                   Category: {todo.category?.name || "None"}
@@ -92,10 +88,7 @@ function TodoList() {
                 </div>
 
                 <div className={styles.buttonGroup}>
-                  <button
-                    className={styles.edit}
-                    onClick={() => setEditingTodo(todo)}
-                  >
+                  <button className={styles.edit} onClick={() => handleEdit(todo)}>
                     Edit
                   </button>
                   <button
@@ -111,12 +104,20 @@ function TodoList() {
                     Archive
                   </button>
                 </div>
-              </li>
+              </div>
             ))}
         </div>
       )}
+
+      {editingTodo && (
+        <EditTodo
+          todo={editingTodo}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
     </div>
   );
-};
+}
 
 export default TodoList;

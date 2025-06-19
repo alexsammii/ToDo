@@ -6,7 +6,7 @@
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -25,3 +25,27 @@
 .addButton:hover {
   background-color: #2563eb;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboardLink {
+  padding: 0.5rem 1rem;
+  background-color: #6c63ff;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: #584fd6;
+  }
+}
+
+

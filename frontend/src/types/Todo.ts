@@ -4,6 +4,7 @@ export interface Category {
 }
 
 export interface Todo {
+  name: string;
   id: number;
   task: string;
   dueDate: string;

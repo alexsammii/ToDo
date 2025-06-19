@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Todo, Category } from "../types/Todo";
-import { getAllCategories } from "../services/TodoServices";
-import { updateTodo } from "../services/TodoServices";
+import { getAllCategories, updateTodo } from "../services/TodoServices";
+import Modal from "../components/modal/Modal";
+import styles from "../components/modal/Modal.module.scss";
 
-interface EditTodo {
+interface Props {
   todo: Todo;
   onSave: () => void;
   onCancel: () => void;
 }
 
-const EditTodo: React.FC<EditTodo> = ({ todo, onSave, onCancel }) => {
+const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
   const [task, setTask] = useState(todo.task);
-  const [dueDate, setDueDate] = useState(todo.dueDate.slice(0, 10)); // format for input
+  const [dueDate, setDueDate] = useState(todo.dueDate.slice(0, 10));
   const [completed, setCompleted] = useState(todo.completed);
   const [categoryId, setCategoryId] = useState(todo.category?.id || 0);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -30,7 +31,7 @@ const EditTodo: React.FC<EditTodo> = ({ todo, onSave, onCancel }) => {
       completed,
       category: {
         id: categoryId,
-        name: "",
+        name: "", 
       },
     };
 
@@ -43,60 +44,54 @@ const EditTodo: React.FC<EditTodo> = ({ todo, onSave, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="border p-4 mb-4 rounded bg-gray-100">
-      <h3 className="text-lg font-semibold mb-2">Edit Task</h3>
-
-      <input
-        type="text"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        className="border p-2 mb-2 w-full"
-        placeholder="Task name"
-        required
-      />
-
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        className="border p-2 mb-2 w-full"
-      />
-
-      <div className="mb-2">
-        <label className="mr-2">Completed:</label>
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={(e) => setCompleted(e.target.checked)}
-        />
+    <Modal title="Edit" onClose={onCancel}>
+      <div className={styles.editHeader}>
+        <h2>{todo.task}</h2>
       </div>
 
-      <select
-        value={categoryId}
-        onChange={(e) => setCategoryId(Number(e.target.value))}
-        className="border p-2 mb-2 w-full"
-      >
-        <option value="">Select a category</option>
-        {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
-            {cat.name}
-          </option>
-        ))}
-      </select>
+      <form onSubmit={handleSubmit} className={styles.modalForm}>
+        <div className={styles.formGroup}>
+          <label>Due Date:</label>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+        </div>
 
-      <div className="flex gap-2">
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="bg-gray-300 px-4 py-2 rounded"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
+        <div className={styles.formGroup}>
+          <label>Category:</label>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(Number(e.target.value))}
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.checkboxGroup}>
+          <input
+            id="completed"
+            type="checkbox"
+            checked={completed}
+            onChange={(e) => setCompleted(e.target.checked)}
+          />
+          <label htmlFor="completed">Completed</label>
+        </div>
+
+        <div className={styles.formActions}>
+          <button type="submit">Save</button>
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 

@@ -78,19 +78,18 @@ export const getAllCategories = async (): Promise<Category[]> => {
 
 
 // CREATE a new category
-export const createCategory = async (name: string): Promise<void> => {
-  const response = await fetch("http://localhost:8080/categories", {
+export async function createCategory(name: string): Promise<Category> {
+  const res = await fetch("http://localhost:8080/categories", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to create category");
-  }
-};
+  if (!res.ok) throw new Error("Failed to create category");
+
+  return res.json();
+}
+
 
 // DUPLICATE tasks
 export const duplicateTodo = async (todo: Todo): Promise<Todo> => {
@@ -117,6 +116,8 @@ export const duplicateTodo = async (todo: Todo): Promise<Todo> => {
   const data = await response.json();
   return data;
 };
+
+
 
 
 
