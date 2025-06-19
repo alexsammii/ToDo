@@ -103,31 +103,31 @@ events={todos.flatMap((todo) => {
     const date = new Date(todo.dueDate);
     const dateStr = date.toISOString().split("T")[0];
 
-    const timeStr = todo.time && typeof todo.time === "string" ? todo.time : "00:00";
+    const timeStr =
+      todo.time && typeof todo.time === "string"
+        ? todo.time
+        : "00:00";
 
-    const isoString = `${dateStr}T${timeStr}:00+10:00`;
+    const fullDateTime = `${dateStr}T${timeStr}`;
 
-    const start = new Date(isoString);
-
-    if (isNaN(start.getTime())) throw new Error("Invalid Date");
-
-    return [{
-      title: todo.task,
-      start,
-      allDay: todo.allDay,
-      backgroundColor: todo.completed
-        ? "#6ccf6d"
-        : todo.archived
-        ? "#ff6b6b"
-        : "#4dabf7",
-      borderColor: "transparent",
-    }];
+    return [
+      {
+        title: todo.task,
+        start: fullDateTime,
+        allDay: todo.allDay,
+        backgroundColor: todo.completed
+          ? "#6ccf6d"
+          : todo.archived
+          ? "#ff6b6b"
+          : "#4dabf7",
+        borderColor: "transparent",
+      },
+    ];
   } catch (err) {
     console.warn(`Invalid task date for ${todo.task}`, err);
     return [];
   }
 })}
-
 
         />
       </div>
