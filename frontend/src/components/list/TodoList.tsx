@@ -54,6 +54,12 @@ function TodoList() {
     setEditingTodo(null);
   };
 
+{todos
+  .filter((todo) => !hideArchived || !todo.archived)
+  .map((todo) => {
+    console.log(todo); // ✅ Add this
+})};
+
   return (
     <div className={styles.todoList}>
       <h2 className={styles.header}>All Tasks</h2>
@@ -80,6 +86,13 @@ function TodoList() {
                 <div className={styles.todoMeta}>
                   Due: {todo.dueDate?.slice(0, 10)}
                 </div>
+                {todo.allDay ? (
+                <div className={styles.todoMeta}>Time: All Day</div>
+                ) : (
+                todo.time && (
+                <div className={styles.todoMeta}>Time: {todo.time}</div>
+                )
+                )}
                 <div className={styles.todoStatus}>
                   Completed: {todo.completed ? "✅" : "❌"}
                 </div>

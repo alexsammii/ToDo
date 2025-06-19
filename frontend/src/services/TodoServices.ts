@@ -40,6 +40,8 @@ export const updateTodo = async (id: number, todo: Todo): Promise<Todo> => {
         body: JSON.stringify({
             task: todo.task,
             dueDate: todo.dueDate,
+            time: todo.time,
+            allDay: todo.allDay,
             completed: todo.completed,
             archived: todo.archived,
             category: {

@@ -87,24 +87,48 @@ function Dashboard() {
 
       <div className={styles.calendarContainer}>
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          }}
-          height="auto"
-          events={todos.map((todo) => ({
-            title: todo.task,
-            start: todo.dueDate,
-            backgroundColor: todo.completed
-              ? "#6ccf6d"
-              : todo.archived
-              ? "#ff6b6b"
-              : "#4dabf7",
-            borderColor: "transparent",
-          }))}
+  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+  initialView="timeGridWeek"
+  timeZone="Australia/Melbourne"
+  headerToolbar={{
+    left: "prev,next today",
+    center: "title",
+    right: "dayGridMonth,timeGridWeek,timeGridDay",
+  }}
+  height="auto"
+events={todos.flatMap((todo) => {
+  try {
+    if (!todo.dueDate) return [];
+
+    const date = new Date(todo.dueDate);
+    const dateStr = date.toISOString().split("T")[0];
+
+    const timeStr = todo.time && typeof todo.time === "string" ? todo.time : "00:00";
+
+    const isoString = `${dateStr}T${timeStr}:00+10:00`;
+
+    const start = new Date(isoString);
+
+    if (isNaN(start.getTime())) throw new Error("Invalid Date");
+
+    return [{
+      title: todo.task,
+      start,
+      allDay: todo.allDay,
+      backgroundColor: todo.completed
+        ? "#6ccf6d"
+        : todo.archived
+        ? "#ff6b6b"
+        : "#4dabf7",
+      borderColor: "transparent",
+    }];
+  } catch (err) {
+    console.warn(`Invalid task date for ${todo.task}`, err);
+    return [];
+  }
+})}
+
+
         />
       </div>
 
@@ -127,7 +151,6 @@ function Dashboard() {
     </div>
   ))}
 </div>
-
 
         </Modal>
       )}

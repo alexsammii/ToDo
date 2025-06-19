@@ -4,6 +4,8 @@ export interface Category {
 }
 
 export interface Todo {
+  time: any;
+  allDay: any;
   name: string;
   id: number;
   task: string;
@@ -13,12 +15,14 @@ export interface Todo {
   category: Category;
 }
 
-export interface CreateTodoDTO {
+export type CreateTodoDTO = {
   task: string;
   dueDate: string;
+  time?: string | null; 
+  allDay?: boolean; 
   completed: boolean;
   archived: boolean;
   category: {
     id: number;
   };
-}
+};

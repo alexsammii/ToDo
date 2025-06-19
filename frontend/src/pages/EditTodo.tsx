@@ -16,6 +16,9 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
   const [completed, setCompleted] = useState(todo.completed);
   const [categoryId, setCategoryId] = useState(todo.category?.id || 0);
   const [categories, setCategories] = useState<Category[]>([]);
+const [time, setTime] = useState(todo.time || "");
+const [allDay, setAllDay] = useState(todo.allDay || false);
+
 
   useEffect(() => {
     getAllCategories().then(setCategories).catch(console.error);
@@ -28,6 +31,8 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
       ...todo,
       task,
       dueDate,
+      time: allDay ? null : time,
+      allDay,
       completed,
       category: {
         id: categoryId,
@@ -49,17 +54,10 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
         <h2>{todo.task}</h2>
       </div>
 
-      <form onSubmit={handleSubmit} className={styles.modalForm}>
-        <div className={styles.formGroup}>
-          <label>Due Date:</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
-        </div>
 
-        <div className={styles.formGroup}>
+
+      <form onSubmit={handleSubmit} className={styles.modalForm}>
+      <div className={styles.formGroup}>
           <label>Category:</label>
           <select
             value={categoryId}
@@ -73,6 +71,37 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
             ))}
           </select>
         </div>
+
+        <div className={styles.formGroup}>
+          <label>Due Date:</label>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+  <label>Time:</label>
+  <input
+    type="time"
+    value={time}
+    onChange={(e) => setTime(e.target.value)}
+    disabled={allDay}
+    required={!allDay}
+  />
+</div>
+
+<div className={styles.checkboxGroup}>
+  <label>
+    <input
+      type="checkbox"
+      checked={allDay}
+      onChange={(e) => setAllDay(e.target.checked)}
+    />
+    All Day
+  </label>
+</div>
 
         <div className={styles.checkboxGroup}>
           <input

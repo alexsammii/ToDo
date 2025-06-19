@@ -16,6 +16,8 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [time, setTime] = useState("");
+  const [allDay, setAllDay] = useState(false);
 
   useEffect(() => {
     getAllCategories()
@@ -31,12 +33,16 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
       await createTodo({
         task,
         dueDate,
+        time: allDay ? null : time, 
+        allDay,       
         completed: false,
         archived: false,
         category: { id: categoryId },
       });
       setTask("");
       setDueDate("");
+      setTime("");     
+      setAllDay(false);
       setCategoryId(null);
       onTodoAdded();
     } catch (err) {
@@ -57,6 +63,11 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
     }
   };
 
+
+
+  
+
+
   return (
     <Modal title="Add Task" onClose={onCancel}>
       <form onSubmit={handleSubmit} className={styles.modalForm}>
@@ -67,16 +78,6 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             placeholder="Enter task"
-            required
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label>Due Date:</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
             required
           />
         </div>
@@ -149,6 +150,41 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
   )}
 </div>
 
+
+        <div className={styles.formGroup}>
+          <label>Due Date:</label>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+  <label>Time:</label>
+  <input
+    type="time"
+    value={time}
+    onChange={(e) => setTime(e.target.value)}
+    disabled={allDay}
+    required={!allDay}
+  />
+</div>
+
+<div className={styles.checkboxGroup}>
+  <label>
+    <input
+      type="checkbox"
+      checked={allDay}
+      onChange={(e) => setAllDay(e.target.checked)}
+    />
+    All Day
+  </label>
+</div>
+
+
+        
 
         <div className={styles.formActions}>
           <button type="submit">Add Todo</button>

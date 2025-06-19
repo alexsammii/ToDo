@@ -27,6 +27,8 @@ public class TodoService {
         Todo todo = todoRepository.findById(id).orElseThrow();
         todo.setTask(updatedTodo.getTask());
         todo.setDueDate(updatedTodo.getDueDate());
+        todo.setTime(updatedTodo.getTime()); 
+        todo.setAllDay(updatedTodo.isAllDay()); 
         todo.setCompleted(updatedTodo.isCompleted());
         todo.setArchived(updatedTodo.isArchived());
         todo.setCategory(updatedTodo.getCategory());

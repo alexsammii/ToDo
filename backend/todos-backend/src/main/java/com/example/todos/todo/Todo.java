@@ -1,5 +1,6 @@
 package com.example.todos.todo;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.example.todos.categories.Category;
@@ -20,6 +21,14 @@ public class Todo extends BaseEntity {
     // duedate
     @Column
     private Date dueDate;
+
+    // time
+    @Column(nullable = true)
+    private String time;
+
+    // all day state
+    @Column(nullable = false)
+    private boolean allDay;
 
     // status - isCompleted - boolean
     @Column
@@ -48,6 +57,22 @@ public class Todo extends BaseEntity {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public boolean isAllDay() {
+        return allDay;
+    }
+
+    public void setAllDay(boolean allDay) {
+        this.allDay = allDay;
     }
 
     public boolean isCompleted() {
