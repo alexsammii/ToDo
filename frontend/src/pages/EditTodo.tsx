@@ -57,6 +57,17 @@ const [allDay, setAllDay] = useState(todo.allDay || false);
 
 
       <form onSubmit={handleSubmit} className={styles.modalForm}>
+<div className={styles.formGroup}>
+  <label htmlFor="taskName">Task Name:</label>
+  <input
+    type="text"
+    id="taskName"
+    value={task}
+    onChange={(e) => setTask(e.target.value)}
+    placeholder="Enter task name"
+  />
+</div>
+
       <div className={styles.formGroup}>
           <label>Category:</label>
           <select

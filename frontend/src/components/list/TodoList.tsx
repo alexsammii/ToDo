@@ -54,12 +54,6 @@ function TodoList() {
     setEditingTodo(null);
   };
 
-{todos
-  .filter((todo) => !hideArchived || !todo.archived)
-  .map((todo) => {
-    console.log(todo); // ✅ Add this
-})};
-
   return (
     <div className={styles.todoList}>
       <h2 className={styles.header}>All Tasks</h2>
