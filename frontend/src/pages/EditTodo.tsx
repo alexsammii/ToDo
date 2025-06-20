@@ -50,11 +50,6 @@ const [allDay, setAllDay] = useState(todo.allDay || false);
 
   return (
     <Modal title="Edit" onClose={onCancel}>
-      <div className={styles.editHeader}>
-        <h2>{todo.task}</h2>
-      </div>
-
-
 
       <form onSubmit={handleSubmit} className={styles.modalForm}>
 <div className={styles.formGroup}>
