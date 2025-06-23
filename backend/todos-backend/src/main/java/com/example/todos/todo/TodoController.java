@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/todos")
@@ -18,6 +21,24 @@ public class TodoController {
     public List<Todo> getAll() {
         return todoService.getAll();
     }
+
+    @GetMapping("/filter")
+    public Page<Todo> getFilteredTodos(
+    @RequestParam(defaultValue = "false") boolean archived,
+    @RequestParam(defaultValue = "false") boolean completed,
+    Pageable pageable
+) {
+    return todoService.getByArchivedAndCompleted(archived, completed, pageable);
+}
+
+    @GetMapping("/filter/category")
+    public Page<Todo> getByCategory(
+    @RequestParam Long categoryId,
+    Pageable pageable
+) {
+    return todoService.getByCategoryId(categoryId, pageable);
+}
+
 
     @PostMapping
     public Todo create(@RequestBody Todo todo) {

@@ -2,10 +2,11 @@ package com.example.todos.todo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class TodoService {
@@ -17,9 +18,14 @@ public class TodoService {
     return todoRepository.findAll();
 }
 
-public Page<Todo> getByCategoryId(Long categoryId, Pageable pageable) {
+    public Page<Todo> getByArchivedAndCompleted(boolean archived, boolean completed, Pageable pageable) {
+    return todoRepository.findByArchivedAndCompleted(archived, completed, pageable);
+}
+
+    public Page<Todo> getByCategoryId(Long categoryId, Pageable pageable) {
     return todoRepository.findByCategoryId(categoryId, pageable);
 }
+
 
     public Todo create(Todo todo) {
         return todoRepository.save(todo);
@@ -43,16 +49,4 @@ public Page<Todo> getByCategoryId(Long categoryId, Pageable pageable) {
         todo.setArchived(true);
         todoRepository.save(todo);
     }
-
-    public Page<Todo> getFilteredTodos(Boolean archived, Boolean completed, Pageable pageable) {
-    if (archived != null && completed != null) {
-        return todoRepository.findByIsArchivedAndIsCompleted(archived, completed, pageable);
-    } else if (archived != null) {
-        return todoRepository.findByIsArchived(archived, pageable);
-    } else if (completed != null) {
-        return todoRepository.findByIsCompleted(completed, pageable);
-    } else {
-        return todoRepository.findAll(pageable);
-    }
-}
 }
