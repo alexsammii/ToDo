@@ -3,11 +3,14 @@ import { getAllCategories, createTodo, createCategory } from "../services/TodoSe
 import { Category } from "../types/Todo";
 import Modal from "../components/modal/Modal";
 import styles from "../components/modal/Modal.module.scss";
+import { toast } from "react-toastify";
+
 
 type Props = {
-  onTodoAdded: () => void;
+  onTodoAdded: (newTodo: any) => void; 
   onCancel: () => void;
 };
+
 
 export default function AddTodo({ onTodoAdded, onCancel }: Props) {
   const [task, setTask] = useState("");
@@ -25,30 +28,38 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
       .catch((err) => console.error("Failed to load categories.", err));
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!task || !dueDate || categoryId === null) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!task || !dueDate || categoryId === null) return;
 
-    try {
-      await createTodo({
-        task,
-        dueDate,
-        time: allDay ? null : time, 
-        allDay,       
-        completed: false,
-        archived: false,
-        category: { id: categoryId },
-      });
-      setTask("");
-      setDueDate("");
-      setTime("");     
-      setAllDay(false);
-      setCategoryId(null);
-      onTodoAdded();
-    } catch (err) {
-      console.error("Failed to create todo", err);
-    }
-  };
+  try {
+    const created = await createTodo({
+      task,
+      dueDate,
+      time: allDay ? null : time,
+      allDay,
+      completed: false,
+      archived: false,
+      category: { id: categoryId },
+    });
+
+    setTask("");
+    setDueDate("");
+    setTime("");
+    setAllDay(false);
+    setCategoryId(null);
+
+    toast.success("Task added!", {
+    position: "top-right",
+    autoClose: 2000,
+  });
+
+    onTodoAdded(created); 
+  } catch (err) {
+    console.error("Failed to create todo", err);
+  }
+};
+
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return;
@@ -62,10 +73,6 @@ export default function AddTodo({ onTodoAdded, onCancel }: Props) {
       console.error("Failed to add category", err);
     }
   };
-
-
-
-  
 
 
   return (

@@ -119,9 +119,16 @@ export const duplicateTodo = async (todo: Todo): Promise<Todo> => {
   return data;
 };
 
+export const toggleCompleteTodo = async (id: number, completed: boolean) => {
+  const response = await fetch(`http://localhost:8080/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ completed }),
+  });
 
-
-
-
-
+  if (!response.ok) throw new Error("Failed to update completion status");
+  return await response.json();
+};
 

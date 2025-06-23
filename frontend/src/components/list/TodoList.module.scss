@@ -43,9 +43,23 @@
   justify-content: space-between;
   transition: transform 0.2s ease;
   font-size: 1.125rem; 
+  position: relative;
+  padding-top: 24px; // make room for checkbox
+
+
+.topLeftCheckbox {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  transform: scale(1.6);
+  cursor: pointer;
+}
+
 
   &:hover {
     transform: scale(1.02);
+
+    
   }
 }
 
