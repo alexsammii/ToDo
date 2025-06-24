@@ -18,15 +18,14 @@ const [todos, setTodos] = useState<Todo[]>([]);
 const refreshTodos = async () => {
   const data = await getAllTodos();
   setTodos(data);
+  console.log("Refetched todos:", data);
+
 };
 
 useEffect(() => {
   refreshTodos();
 }, []);
 
-
-
-  
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Todo Task Manager</h1>
@@ -34,36 +33,28 @@ useEffect(() => {
   <button className={styles.addButton} onClick={() => setShowForm((prev) => !prev)}>
     {showForm ? "Cancel" : "+ Add Todo"}
   </button>
-
-{showForm && (
-  <AddTodo
-    onTodoAdded={() => {
-      refreshTodos();
-      setShowForm(false);
-    }}
-    onCancel={() => setShowForm(false)}
-  />
-)}
-
-  <div className={styles.linkWrapper}>
+    <div className={styles.linkWrapper}>
     <Link to="/" className={styles.dashboardLink}>
       Go to Dashboard
     </Link>
   </div>
-</div>
 
-     
- 
-    {showForm && (
-  <AddTodo
-    onTodoAdded={() => setShowForm(false)}
-    onCancel={() => setShowForm(false)}
-  />
+{showForm && (
+<AddTodo
+  todos={todos}
+  refreshTodos={refreshTodos}
+  onTodoAdded={() => {
+    refreshTodos();
+    setShowForm(false);
+  }}
+  onCancel={() => setShowForm(false)}
+/>
 )}
 
-        
+<TodoList todos={todos} refreshTodos={refreshTodos} />
 
-      <TodoList />
+
+</div>
     </div>
   );
 }

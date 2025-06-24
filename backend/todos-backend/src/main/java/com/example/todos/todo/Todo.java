@@ -30,13 +30,13 @@ public class Todo extends BaseEntity {
     @Column(nullable = false)
     private boolean allDay;
 
-    // status - isCompleted - boolean
+    // status - Completed - boolean
     @Column
-    private boolean isCompleted;
+    private boolean completed;
 
-    // delete - isArchived - boolean
+    // delete - Archived - boolean
     @Column
-    private boolean isArchived;
+    private boolean archived;
 
     // categories
     @ManyToOne
@@ -76,19 +76,19 @@ public class Todo extends BaseEntity {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return completed;
     }
 
-    public void setCompleted(boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public boolean isArchived() {
-        return isArchived;
+        return archived;
     }
 
-    public void setArchived(boolean isArchived) {
-        this.isArchived = isArchived;
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 
     public Category getCategory() {

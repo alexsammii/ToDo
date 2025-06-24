@@ -11,66 +11,64 @@ import EditTodo from "../../pages/EditTodo";
 import { toast } from "react-toastify";
 
 
-function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+type Props = {
+  todos: Todo[];
+  refreshTodos: () => void;
+};
+
+export default function TodoList({todos, refreshTodos }: Props) {
+  // const [todos, setTodos] = useState<Todo[]>([]);
   const [hideArchived, setHideArchived] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
 
-  const fetchTodos = () => {
-    getAllTodos()
-      .then((data) => setTodos(data))
-      .catch((error) => console.error("Error fetching todos:", error));
-  };
+  // const fetchTodos = () => {
+  //   getAllTodos()
+  //     .then((data) => setTodos(data))
+  //     .catch((error) => console.error("Error fetching todos:", error));
+  // };
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
+  // useEffect(() => {
+  //   fetchTodos();
+  // }, []);
 
 
   const handleDuplicate = async (todo: Todo) => {
     try {
       await duplicateTodo(todo);
+      refreshTodos();
       toast.success("Task duplicated!", {
     position: "top-right",
     autoClose: 2000,
   });
-      fetchTodos();
+      // fetchTodos();
     } catch (error) {
       console.error("Error duplicating todo:", error);
     }
   };
-
-  const handleToggleCompleted = async (todo: Todo) => {
+const handleToggleComplete = async (todo: Todo) => {
   try {
     await toggleCompleteTodo(todo.id, !todo.completed);
-    toast.success(
-  !todo.completed ? "Task marked as completed!" : "Task marked as incomplete.", {
-    position: "top-right",
-    autoClose: 2000,
-  });
-    setTodos((prevTodos) =>
-      prevTodos.map((t) =>
-        t.id === todo.id ? { ...t, completed: !t.completed } : t
-      )
-    );
+    refreshTodos();
+    toast.success("Task status updated!");
   } catch (error) {
-    console.error("Error updating completion:", error);
+    console.error("Error toggling complete:", error);
   }
 };
 
+
   const handleArchive = async (id: number) => {
-    try {
-      await archiveTodo(id);
-      toast.info("Task archived.", {
-    position: "top-right",
-    autoClose: 2000,
-  });
-      fetchTodos();
-    } catch (error) {
-      console.error("Error archiving todo:", error);
-    }
-  };
+  try {
+    console.log("Archiving todo with ID:", id);
+    await archiveTodo(id);
+    console.log("Archive API call finished for ID:", id);
+    refreshTodos();
+    toast.info("Task archived.");
+  } catch (error) {
+    console.error("❌ Error archiving todo:", error);
+  }
+};
+
 
 
   const handleEdit = (todo: Todo) => {
@@ -79,7 +77,8 @@ function TodoList() {
 
   const handleSave = () => {
     setEditingTodo(null);
-    fetchTodos();
+    refreshTodos();
+    // fetchTodos();
   };
 
   const handleCancel = () => {
@@ -103,18 +102,18 @@ function TodoList() {
       ) : (
         <div className={styles.cardGrid}>
           {todos
-            .slice()
-            .reverse()
-            .filter((todo) => !hideArchived || !todo.archived)
-            .map((todo) => (
+          .slice()
+          .reverse()
+          .filter((todo) => !hideArchived || !todo.archived)
+          .map((todo) => (
               
 <div key={todo.id} className={styles.todoItem}>
-  <input
-    type="checkbox"
-    checked={todo.completed}
-    onChange={() => handleToggleCompleted(todo)}
-    className={styles.topLeftCheckbox}
-  />
+<input
+  type="checkbox"
+  checked={todo.completed}
+  onChange={() => handleToggleComplete(todo)}
+  className={styles.topLeftCheckbox}
+/>
 
   <div className={styles.todoTitle}>
     <span>{todo.task}</span>
@@ -127,8 +126,13 @@ function TodoList() {
   ) : (
     todo.time && <div className={styles.todoMeta}>Time: {todo.time}</div>
   )}
-  <div className={styles.todoStatus}>Completed: {todo.completed ? "✅" : "❌"}</div>
-  <div className={styles.todoStatus}>Archived: {todo.archived ? "📦" : "🟢"}</div>
+<div className={styles.todoStatus}>
+  Completed: {todo.completed ? '✅' : '❌'}
+</div>
+<div className={styles.todoStatus}>
+  Archived: {todo.archived ? '📦' : '🟢'}
+</div>
+
 
   <div className={styles.buttonGroup}>
     <button className={styles.edit} onClick={() => handleEdit(todo)}>Edit</button>
@@ -153,4 +157,4 @@ function TodoList() {
 
 }
 
-export default TodoList;
+// export default TodoList;

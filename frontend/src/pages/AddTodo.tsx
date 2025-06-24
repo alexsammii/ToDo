@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import { getAllCategories, createTodo, createCategory } from "../services/TodoServices";
-import { Category } from "../types/Todo";
+import { Category, Todo } from "../types/Todo";
 import Modal from "../components/modal/Modal";
 import styles from "../components/modal/Modal.module.scss";
 import { toast } from "react-toastify";
 
 
 type Props = {
-  onTodoAdded: (newTodo: any) => void; 
+  refreshTodos: () => void;
+  onTodoAdded: (todo: Todo) => void;
   onCancel: () => void;
+  todos: Todo[];
 };
 
-
-export default function AddTodo({ onTodoAdded, onCancel }: Props) {
+export default function TodoList({ refreshTodos, onCancel }: Props) {
   const [task, setTask] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -50,16 +51,17 @@ const handleSubmit = async (e: React.FormEvent) => {
     setCategoryId(null);
 
     toast.success("Task added!", {
-    position: "top-right",
-    autoClose: 2000,
-  });
+      position: "top-right",
+      autoClose: 2000,
+    });
 
-    onTodoAdded(created); 
+    refreshTodos();
+    // onTodoAdded(created);
+    onCancel();
   } catch (err) {
     console.error("Failed to create todo", err);
   }
 };
-
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return;
@@ -73,7 +75,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       console.error("Failed to add category", err);
     }
   };
-
 
   return (
     <Modal title="Add Task" onClose={onCancel}>
@@ -190,9 +191,6 @@ const handleSubmit = async (e: React.FormEvent) => {
   </label>
 </div>
 
-
-        
-
         <div className={styles.formActions}>
           <button type="submit">Add Todo</button>
           <button type="button" onClick={onCancel}>
@@ -203,3 +201,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     </Modal>
   );
 }
+
+function onTodoAdded(created: Todo) {
+  throw new Error("Function not implemented.");
+}
+

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllTodos } from "../../services/TodoServices";
+import { getAllTodos, getFilteredTodos, getTodoCount } from "../../services/TodoServices";
 import { Todo } from "../../types/Todo";
 import styles from "./Dashboard.module.scss";
 
@@ -17,44 +17,70 @@ function Dashboard() {
   const [modalTitle, setModalTitle] = useState("");
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
-  useEffect(() => {
-    getAllTodos().then(setTodos).catch(console.error);
-  }, []);
+useEffect(() => {
+  // fetch default todos for display
+  getFilteredTodos(false, false, 0, 5)
+    .then((data) => {
+      setTodos(data.content);
+      setTotalCount(data.totalElements);
+    })
+    .catch(console.error);
+
+  // fetch counts separately
+  getTodoCount(false, true).then(setCompletedCount); // completed only
+getTodoCount(false, false).then(setUpcomingCount); // upcoming (default)
+getTodoCount(true, false).then(setArchivedCount); // archived
+getTodoCount(false, false).then(setTotalCount); // total (default, again)
+
+}, []);
+
+
 
   useEffect(() => {
     document.title = "Task Manager";
   }, []);
 
   const total = todos.length;
-  const completed = todos.filter((t) => t.completed).length;
-  const archived = todos.filter((t) => t.archived).length;
-  const upcoming = todos.filter((t) => !t.completed && !t.archived).length;
+  // const completed = todos.filter((t) => t.completed).length;
+  // const archived = todos.filter((t) => t.archived).length;
+  // const upcoming = todos.filter((t) => !t.completed && !t.archived).length;
+  const [completedCount, setCompletedCount] = useState(0);
+const [upcomingCount, setUpcomingCount] = useState(0);
+const [archivedCount, setArchivedCount] = useState(0);
+const [totalCount, setTotalCount] = useState(0);
+
 
   const handleCardClick = (type: "completed" | "upcoming" | "archived" | "total") => {
-    let list: Todo[] = [];
+  let modalTitle = "";
+  let archived = false;
+  let completed = false;
 
-    switch (type) {
-      case "completed":
-        list = todos.filter((t) => t.completed);
-        setModalTitle("Completed Tasks");
-        break;
-      case "upcoming":
-        list = todos.filter((t) => !t.completed && !t.archived);
-        setModalTitle("Upcoming Tasks");
-        break;
-      case "archived":
-        list = todos.filter((t) => t.archived);
-        setModalTitle("Archived Tasks");
-        break;
-      case "total":
-        list = todos;
-        setModalTitle("All Tasks");
-        break;
-    }
+  switch (type) {
+    case "completed":
+      modalTitle = "Completed Tasks";
+      completed = true;
+      break;
+    case "upcoming":
+      modalTitle = "Upcoming Tasks";
+      completed = false;
+      archived = false;
+      break;
+    case "archived":
+      modalTitle = "Archived Tasks";
+      archived = true;
+      break;
+    case "total":
+      modalTitle = "All Tasks";
+      break;
+  }
 
-    setFilteredTodos(list);
+  getFilteredTodos(archived, completed, 0, 10).then((data) => {
+    setFilteredTodos(data.content);
+    setModalTitle(modalTitle);
     setShowModal(true);
-  };
+  });
+};
+
 
   return (
     <div className={styles.dashboard}>
@@ -66,19 +92,20 @@ function Dashboard() {
 
       <div className={styles.statsGrid}>
         <div className={`${styles.card} ${styles.green}`} onClick={() => handleCardClick("completed")}>
-          <h2>{completed}</h2>
+          <h2>{completedCount}</h2>
           <p>Tasks Completed</p>
+
         </div>
         <div className={`${styles.card} ${styles.blue}`} onClick={() => handleCardClick("upcoming")}>
-          <h2>{upcoming}</h2>
+          <h2>{upcomingCount}</h2>
           <p>Upcoming Tasks</p>
         </div>
         <div className={`${styles.card} ${styles.red}`} onClick={() => handleCardClick("archived")}>
-          <h2>{archived}</h2>
+          <h2>{archivedCount}</h2>
           <p>Archived Tasks</p>
         </div>
         <div className={`${styles.card} ${styles.purple}`} onClick={() => handleCardClick("total")}>
-          <h2>{total}</h2>
+          <h2>{totalCount}</h2>
           <p>Total Tasks</p>
         </div>
       </div>

@@ -1,6 +1,10 @@
 import { Todo, Category, CreateTodoDTO } from "../types/Todo";
 
 const BASE_URL = "http://localhost:8080/todos";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+console.log("API URL:", API_URL);
+
+
 
 // GET all todos
 export const getAllTodos = async (): Promise<Todo[]> => {
@@ -119,16 +123,51 @@ export const duplicateTodo = async (todo: Todo): Promise<Todo> => {
   return data;
 };
 
+// COMPLETE tasks
 export const toggleCompleteTodo = async (id: number, completed: boolean) => {
-  const response = await fetch(`http://localhost:8080/todos/${id}`, {
-    method: "PUT",
+  const response = await fetch(`${API_URL}/${id}/complete`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ completed }),
   });
 
-  if (!response.ok) throw new Error("Failed to update completion status");
-  return await response.json();
+  if (!response.ok) {
+    throw new Error("Failed to toggle complete");
+  }
+
+  return response.json();
+};
+
+
+export const getFilteredTodos = async (
+  archived = false,
+  completed = false,
+  page = 0,
+  size = 5
+) => {
+  const response = await fetch(
+    `http://localhost:8080/todos/filter?archived=${archived}&completed=${completed}&page=${page}&size=${size}`
+  );
+  if (!response.ok) throw new Error("Failed to fetch filtered todos");
+  return response.json(); // returns { content: Todo[], totalPages, totalElements, etc. }
+};
+
+export const getTodoCount = async (
+  archived = false,
+  completed = false
+): Promise<number> => {
+  const url = `http://localhost:8080/todos/filter?archived=${archived}&completed=${completed}&page=0&size=1`;
+  console.log("Calling:", url); // debug line
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Error fetching count:", data);
+    throw new Error("Failed to get count");
+  }
+
+  return data.totalElements;
 };
 

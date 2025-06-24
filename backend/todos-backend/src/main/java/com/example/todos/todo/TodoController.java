@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +23,13 @@ public class TodoController {
         return todoService.getAll();
     }
 
-    @GetMapping("/filter")
-    public Page<Todo> getFilteredTodos(
+@GetMapping("/filter")
+public Page<Todo> getFilteredTodos(
     @RequestParam(defaultValue = "false") boolean archived,
     @RequestParam(defaultValue = "false") boolean completed,
     Pageable pageable
 ) {
+    System.out.println("FILTERING - archived: " + archived + ", completed: " + completed);
     return todoService.getByArchivedAndCompleted(archived, completed, pageable);
 }
 
@@ -56,5 +58,17 @@ public class TodoController {
     todoService.softDelete(id);
     return ResponseEntity.ok("Todo with ID " + id + " has been archived.");
 }
+
+@PatchMapping("/{id}/complete")
+public ResponseEntity<Todo> toggleComplete(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
+    if (!body.containsKey("completed")) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    boolean completed = body.get("completed");
+    Todo updated = todoService.toggleComplete(id, completed);
+    return ResponseEntity.ok(updated);
+}
+
 
 }

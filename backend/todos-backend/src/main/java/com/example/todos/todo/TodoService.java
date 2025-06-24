@@ -49,4 +49,26 @@ public class TodoService {
         todo.setArchived(true);
         todoRepository.save(todo);
     }
+
+//     public Todo toggleComplete(Long id, Todo updatedTodo) {
+//     Todo existing = todoRepository.findById(id).orElseThrow();
+
+//     existing.setCompleted(updatedTodo.completed());
+    
+//     existing.setTask(updatedTodo.getTask());
+//     existing.setDueDate(updatedTodo.getDueDate());
+//     existing.setTime(updatedTodo.getTime());
+//     existing.setAllDay(updatedTodo.isAllDay());
+//     existing.setArchived(updatedTodo.archived());
+//     existing.setCategory(updatedTodo.getCategory());
+
+//     return todoRepository.save(existing);
+// }
+
+public Todo toggleComplete(Long id, boolean completed) {
+    Todo todo = todoRepository.findById(id).orElseThrow();
+    todo.setCompleted(completed);
+    return todoRepository.save(todo);
+}
+
 }

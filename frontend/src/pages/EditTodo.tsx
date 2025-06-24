@@ -22,6 +22,16 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [time, setTime] = useState(todo.time || "");
   const [allDay, setAllDay] = useState(todo.allDay || false);
+  const [form, setForm] = useState({
+  task: todo.task || '',
+  categoryId: todo.category?.id || 0,
+  dueDate: todo.dueDate || '',
+  time: todo.time || '',
+  allDay: todo.allDay ?? false,
+  completed: todo.completed ?? false,
+  archived: todo.archived ?? false,
+});
+
 
 
   useEffect(() => {
@@ -45,7 +55,11 @@ const EditTodo: React.FC<Props> = ({ todo, onSave, onCancel }) => {
     };
 
     try {
-      await updateTodo(todo.id, updatedTodo);
+      await updateTodo(todo.id, {
+  ...todo,
+  ...form,
+});
+
       toast.success("Task updated!", {
     position: "top-right",
     autoClose: 2000,
