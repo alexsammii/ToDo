@@ -151,7 +151,7 @@ export const getFilteredTodos = async (
     `http://localhost:8080/todos/filter?archived=${archived}&completed=${completed}&page=${page}&size=${size}`
   );
   if (!response.ok) throw new Error("Failed to fetch filtered todos");
-  return response.json(); // returns { content: Todo[], totalPages, totalElements, etc. }
+  return response.json();
 };
 
 export const getTodoCount = async (
@@ -159,7 +159,7 @@ export const getTodoCount = async (
   completed = false
 ): Promise<number> => {
   const url = `http://localhost:8080/todos/filter?archived=${archived}&completed=${completed}&page=0&size=1`;
-  console.log("Calling:", url); // debug line
+  console.log("Calling:", url); // debug
   const response = await fetch(url);
   const data = await response.json();
 

@@ -102,27 +102,6 @@ function Dashboard() {
     }
   };
 
-  //   getFilteredTodos(archived, completed, 0, 10).then((data) => {
-  //     setFilteredTodos(data.content);
-  //     setModalTitle(modalTitle);
-  //     setShowModal(true);
-  //   });
-  // };
-
-  //   if (archived === null && completed === null) {
-  //   getAllTodos(0, 10).then((data) => {
-  //     setFilteredTodos(data.content);
-  //     setModalTitle(modalTitle);
-  //     setShowModal(true);
-  //   });
-  // } else {
-  //   getFilteredTodos(archived, completed, 0, 10).then((data) => {
-  //     setFilteredTodos(data.content);
-  //     setModalTitle(modalTitle);
-  //     setShowModal(true);
-  //   });
-  // }
-
   // full calendar implementation
   const calendarEvents = todos.flatMap((todo) => {
     try {
