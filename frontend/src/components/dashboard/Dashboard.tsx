@@ -173,7 +173,7 @@ function Dashboard() {
           onClick={() => handleCardClick("completed")}
         >
           <h2>{completedCount}</h2>
-          <p>Tasks Completed</p>
+          <p>Completed Tasks</p>
         </div>
         <div
           className={`${styles.card} ${styles.blue}`}
