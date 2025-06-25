@@ -10,51 +10,51 @@ function Home() {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-  document.title = "Dashboard"
-}, [])
+    document.title = "Dashboard";
+  }, []);
 
-const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-const refreshTodos = async () => {
-  const data = await getAllTodos();
-  setTodos(data);
-  console.log("Refetched todos:", data);
+  const refreshTodos = async () => {
+    const data = await getAllTodos();
+    setTodos(data);
+    console.log("Refetched todos:", data);
+  };
 
-};
-
-useEffect(() => {
-  refreshTodos();
-}, []);
+  useEffect(() => {
+    refreshTodos();
+  }, []);
 
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Todo Task Manager</h1>
-     <div className={styles.topBar}>
-  <button className={styles.addButton} onClick={() => setShowForm((prev) => !prev)}>
-    {showForm ? "Cancel" : "+ Add Todo"}
-  </button>
-    <div className={styles.linkWrapper}>
-    <Link to="/" className={styles.dashboardLink}>
-      Go to Dashboard
-    </Link>
-  </div>
+      <div className={styles.topBar}>
+        <button
+          className={styles.addButton}
+          onClick={() => setShowForm((prev) => !prev)}
+        >
+          {showForm ? "Cancel" : "+ Add Todo"}
+        </button>
+        <div className={styles.linkWrapper}>
+          <Link to="/" className={styles.dashboardLink}>
+            Go to Dashboard
+          </Link>
+        </div>
 
-{showForm && (
-<AddTodo
-  todos={todos}
-  refreshTodos={refreshTodos}
-  onTodoAdded={() => {
-    refreshTodos();
-    setShowForm(false);
-  }}
-  onCancel={() => setShowForm(false)}
-/>
-)}
+        {showForm && (
+          <AddTodo
+            todos={todos}
+            refreshTodos={refreshTodos}
+            onTodoAdded={() => {
+              refreshTodos();
+              setShowForm(false);
+            }}
+            onCancel={() => setShowForm(false)}
+          />
+        )}
 
-<TodoList todos={todos} refreshTodos={refreshTodos} />
-
-
-</div>
+        <TodoList todos={todos} refreshTodos={refreshTodos} />
+      </div>
     </div>
   );
 }

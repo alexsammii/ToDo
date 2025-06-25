@@ -23,24 +23,21 @@ public class TodoController {
         return todoService.getAll();
     }
 
-@GetMapping("/filter")
-public Page<Todo> getFilteredTodos(
-    @RequestParam(defaultValue = "false") boolean archived,
-    @RequestParam(defaultValue = "false") boolean completed,
-    Pageable pageable
-) {
-    System.out.println("FILTERING - archived: " + archived + ", completed: " + completed);
-    return todoService.getByArchivedAndCompleted(archived, completed, pageable);
-}
+    @GetMapping("/filter")
+    public Page<Todo> getFilteredTodos(
+            @RequestParam(defaultValue = "false") boolean archived,
+            @RequestParam(defaultValue = "false") boolean completed,
+            Pageable pageable) {
+        System.out.println("FILTERING - archived: " + archived + ", completed: " + completed);
+        return todoService.getByArchivedAndCompleted(archived, completed, pageable);
+    }
 
     @GetMapping("/filter/category")
     public Page<Todo> getByCategory(
-    @RequestParam Long categoryId,
-    Pageable pageable
-) {
-    return todoService.getByCategoryId(categoryId, pageable);
-}
-
+            @RequestParam Long categoryId,
+            Pageable pageable) {
+        return todoService.getByCategoryId(categoryId, pageable);
+    }
 
     @PostMapping
     public Todo create(@RequestBody Todo todo) {
@@ -49,26 +46,25 @@ public Page<Todo> getFilteredTodos(
 
     @PutMapping("/{id}")
     public ResponseEntity<Todo> update(@PathVariable Long id, @RequestBody Todo updatedTodo) {
-    Todo result = todoService.update(id, updatedTodo);
-    return ResponseEntity.ok(result);
-}
-
-   @PatchMapping("/{id}/archive")
-    public ResponseEntity<String> archive(@PathVariable Long id) {
-    todoService.softDelete(id);
-    return ResponseEntity.ok("Todo with ID " + id + " has been archived.");
-}
-
-@PatchMapping("/{id}/complete")
-public ResponseEntity<Todo> toggleComplete(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
-    if (!body.containsKey("completed")) {
-        return ResponseEntity.badRequest().build();
+        Todo result = todoService.update(id, updatedTodo);
+        return ResponseEntity.ok(result);
     }
 
-    boolean completed = body.get("completed");
-    Todo updated = todoService.toggleComplete(id, completed);
-    return ResponseEntity.ok(updated);
-}
+    @PatchMapping("/{id}/archive")
+    public ResponseEntity<String> archive(@PathVariable Long id) {
+        todoService.softDelete(id);
+        return ResponseEntity.ok("Todo with ID " + id + " has been archived.");
+    }
 
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Todo> toggleComplete(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
+        if (!body.containsKey("completed")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        boolean completed = body.get("completed");
+        Todo updated = todoService.toggleComplete(id, completed);
+        return ResponseEntity.ok(updated);
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.todos.todo;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.example.todos.categories.Category;
@@ -98,6 +97,5 @@ public class Todo extends BaseEntity {
     public void setCategory(Category category) {
         this.category = category;
     }
-    
 
 }

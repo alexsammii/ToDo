@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-function CreateCategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void }) {
+function CreateCategoryForm({
+  onCategoryAdded,
+}: {
+  onCategoryAdded: () => void;
+}) {
   // value typed in the input field
   const [name, setName] = useState("");
 

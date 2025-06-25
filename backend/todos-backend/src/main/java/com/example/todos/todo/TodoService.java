@@ -15,17 +15,16 @@ public class TodoService {
     private TodoRepository todoRepository;
 
     public List<Todo> getAll() {
-    return todoRepository.findAll();
-}
+        return todoRepository.findAll();
+    }
 
     public Page<Todo> getByArchivedAndCompleted(boolean archived, boolean completed, Pageable pageable) {
-    return todoRepository.findByArchivedAndCompleted(archived, completed, pageable);
-}
+        return todoRepository.findByArchivedAndCompleted(archived, completed, pageable);
+    }
 
     public Page<Todo> getByCategoryId(Long categoryId, Pageable pageable) {
-    return todoRepository.findByCategoryId(categoryId, pageable);
-}
-
+        return todoRepository.findByCategoryId(categoryId, pageable);
+    }
 
     public Todo create(Todo todo) {
         return todoRepository.save(todo);
@@ -35,8 +34,8 @@ public class TodoService {
         Todo todo = todoRepository.findById(id).orElseThrow();
         todo.setTask(updatedTodo.getTask());
         todo.setDueDate(updatedTodo.getDueDate());
-        todo.setTime(updatedTodo.getTime()); 
-        todo.setAllDay(updatedTodo.isAllDay()); 
+        todo.setTime(updatedTodo.getTime());
+        todo.setAllDay(updatedTodo.isAllDay());
         todo.setCompleted(updatedTodo.isCompleted());
         todo.setArchived(updatedTodo.isArchived());
         todo.setCategory(updatedTodo.getCategory());
@@ -50,25 +49,10 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
-//     public Todo toggleComplete(Long id, Todo updatedTodo) {
-//     Todo existing = todoRepository.findById(id).orElseThrow();
-
-//     existing.setCompleted(updatedTodo.completed());
-    
-//     existing.setTask(updatedTodo.getTask());
-//     existing.setDueDate(updatedTodo.getDueDate());
-//     existing.setTime(updatedTodo.getTime());
-//     existing.setAllDay(updatedTodo.isAllDay());
-//     existing.setArchived(updatedTodo.archived());
-//     existing.setCategory(updatedTodo.getCategory());
-
-//     return todoRepository.save(existing);
-// }
-
-public Todo toggleComplete(Long id, boolean completed) {
-    Todo todo = todoRepository.findById(id).orElseThrow();
-    todo.setCompleted(completed);
-    return todoRepository.save(todo);
-}
+    public Todo toggleComplete(Long id, boolean completed) {
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        todo.setCompleted(completed);
+        return todoRepository.save(todo);
+    }
 
 }

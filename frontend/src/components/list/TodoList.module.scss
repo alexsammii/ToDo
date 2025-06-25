@@ -44,7 +44,7 @@
   transition: transform 0.2s ease;
   font-size: 1.125rem; 
   position: relative;
-  padding-top: 24px; // make room for checkbox
+  padding-top: 24px;
 
 
 .topLeftCheckbox {
@@ -156,4 +156,5 @@
     transform: scale(1.02);
   }
 }
+
 
